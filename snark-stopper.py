@@ -58,8 +58,8 @@ CHECK_PERIOD_SEC        = c["CHECK_PERIOD_SEC"]
 STOP_WORKER_FOR_MIN     = c["STOP_WORKER_FOR_MIN"]
 GRAPHQL_HOST            = c["GRAPHQL_HOST"]
 GRAPHQL_PORT            = c["GRAPHQL_PORT"]
-coda = Client(graphql_host=GRAPHQL_HOST, graphql_port=GRAPHQL_PORT)
 
+coda = Client(graphql_host=GRAPHQL_HOST, graphql_port=GRAPHQL_PORT)
 daemon_status = coda.get_daemon_status()
 
 if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 144:
@@ -69,7 +69,6 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 144:
     except Exception as workerAddrErr:
         logger.exception(f'Can\'t get worker public key. Is it running?')
         exit(1)
-
 
 print(f'Current worker public key is: {WORKER_PUB_KEY}')
 
@@ -84,7 +83,7 @@ while True:
         worker_on = worker_manager(mode="off")
         logger.info(worker_on)
 
-        print("Waiting 10 minutes")
+        print(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
         sleep(60 * STOP_WORKER_FOR_MIN)
 
         worker_off = worker_manager(mode="on")
