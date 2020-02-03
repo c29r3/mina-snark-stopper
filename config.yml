@@ -1,0 +1,14 @@
+WORKER_PUB_KEY: YOUR_PUBLIC_KEY
+WORKER_FEE: 15
+
+# how often to check `next proposal time` (seconds)
+CHECK_PERIOD_SEC: 10
+
+# the period after which the employee will be started again (minutes)
+STOP_WORKER_FOR_MIN: 10
+
+# ip address of graphql api (by default 127.0.0.1)
+GRAPHQL_HOST: 127.0.0.1
+
+# graphql port (by default 3085)
+GRAPHQL_PORT: 3085
