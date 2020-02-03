@@ -4,7 +4,7 @@ WORKER_FEE: 15
 # how often to check `next proposal time` (seconds)
 CHECK_PERIOD_SEC: 10
 
-# the period after which the employee will be started again (minutes)
+# the period after which the worker will be started again (minutes)
 STOP_WORKER_FOR_MIN: 10
 
 # ip address of graphql api (by default 127.0.0.1)
