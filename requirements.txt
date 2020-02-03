@@ -1,0 +1,2 @@
+pyyaml
+-e git://github.com/c29r3/coda-python-client.git#egg=CodaClient
