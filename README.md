@@ -10,5 +10,5 @@ Python ver. 3.6+
 
 ## Install
 `git clone https://github.com/c29r3/coda-snark-stopper.git && cd coda-snark-stopper`  
-`pip3 install -r requirements.txt`
+`pip3 install -r requirements.txt`  
 `python3 snark-stopper.py`
