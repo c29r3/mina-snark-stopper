@@ -8,6 +8,7 @@ Worker can take up all processor time, which negatively affects block producer. 
 ## Requirements
 Python ver. 3.6+
 
-## Install
-`pip install -r requirements.txt`  
-`python snark-stopper.py`
+## Install  
+`git clone https://github.com/c29r3/coda-snark-stopper.git && cd coda-snark-stopper`
+`pip3 install -r requirements.txt`  
+`python3 snark-stopper.py`
