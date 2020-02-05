@@ -22,20 +22,18 @@ def parse_next_proposal_time():
         daemon_status = coda.get_daemon_status()
         next_propos = str(daemon_status["daemonStatus"]["nextProposal"]).split()[-1]
 
+        # minutes
         if str(next_propos).endswith("m"):
-            # minutes
             next_propos = float(next_propos.replace("m", ""))
             return next_propos
 
         # hours
         elif str(next_propos).endswith("h"):
-            # convert to minutes
             next_propos = float(next_propos.replace("h", "")) * 60
             return next_propos
 
         # seconds
         elif str(next_propos).endswith("s"):
-            # convert to minutes
             next_propos = float(next_propos.replace("s", "")) / 60
             return next_propos
 
@@ -73,20 +71,23 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 144:
 print(f'Current worker public key is: {WORKER_PUB_KEY}')
 
 while True:
-    next_proposal = round(parse_next_proposal_time(), 1)
-    while next_proposal == "err":
-        sleep(5)
-        next_proposal = parse_next_proposal_time()
+    try:
+        next_proposal = round(parse_next_proposal_time(), 1)
+        while next_proposal == "err":
+            sleep(5)
+            next_proposal = parse_next_proposal_time()
 
-    print(f'Next proposal in {next_proposal} min.')
-    if next_proposal < 3.0:
-        worker_on = worker_manager(mode="off")
-        logger.info(worker_on)
+        print(f'Next proposal in {next_proposal} min.')
+        if next_proposal < 3.0:
+            worker_on = worker_manager(mode="off")
+            logger.info(worker_on)
 
-        print(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
-        sleep(60 * STOP_WORKER_FOR_MIN)
+            print(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
+            sleep(60 * STOP_WORKER_FOR_MIN)
 
-        worker_off = worker_manager(mode="on")
-        logger.info(worker_off)
+            worker_off = worker_manager(mode="on")
+            logger.info(worker_off)
+        sleep(CHECK_PERIOD_SEC)
 
-    sleep(CHECK_PERIOD_SEC)
+    except (TypeError, Exception) as parseErr:
+        logger.exception(f'Parse error: {parseErr}')
