@@ -91,3 +91,4 @@ while True:
 
     except (TypeError, Exception) as parseErr:
         logger.exception(f'Parse error: {parseErr}')
+        sleep(5)
