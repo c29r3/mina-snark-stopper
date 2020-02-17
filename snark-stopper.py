@@ -54,6 +54,7 @@ WORKER_PUB_KEY          = c["WORKER_PUB_KEY"]
 WORKER_FEE              = c["WORKER_FEE"]
 CHECK_PERIOD_SEC        = c["CHECK_PERIOD_SEC"]
 STOP_WORKER_FOR_MIN     = c["STOP_WORKER_FOR_MIN"]
+STOP_WORKER_BEFORE_MIN  = c["STOP_WORKER_BEFORE_MIN"]
 GRAPHQL_HOST            = c["GRAPHQL_HOST"]
 GRAPHQL_PORT            = c["GRAPHQL_PORT"]
 
@@ -78,7 +79,7 @@ while True:
             next_proposal = parse_next_proposal_time()
 
         print(f'Next proposal in {next_proposal} min.')
-        if next_proposal < 3.0:
+        if next_proposal < STOP_WORKER_BEFORE_MIN:
             worker_on = worker_manager(mode="off")
             logger.info(worker_on)
 
