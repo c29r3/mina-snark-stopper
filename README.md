@@ -9,6 +9,10 @@ Worker can take up all processor time, which negatively affects block producer. 
 Python ver. 3.6+
 
 ## Install
-`git clone https://github.com/c29r3/coda-snark-stopper.git && cd coda-snark-stopper`  
-`pip3 install -r requirements.txt`  
-`python3 snark-stopper.py`
+*Your snark worker must be RUNNED*  
+```
+git clone https://github.com/c29r3/coda-snark-stopper.git \
+&& cd coda-snark-stopper \
+&& pip3 install -r requirements.txt \
+&& python3 snark-stopper.py
+```
