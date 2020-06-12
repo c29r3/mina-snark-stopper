@@ -10,7 +10,7 @@ Python ver. 3.6+
 
 ## Install
 *Your snark worker must be RUNNED*  
-*Check the configuration file and set the settings as you wish*
+*Check the configuration file. There are some options you might want to reassign*
 ```
 git clone https://github.com/c29r3/coda-snark-stopper.git \
 && cd coda-snark-stopper \
