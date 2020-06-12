@@ -2,47 +2,34 @@
 # Python 3.6+
 import logging
 import yaml
-from time import sleep
+import time
+from datetime import timedelta
 from CodaClient import Client
 
 
-def worker_manager(mode: str) -> str:
+def worker_manager(mode: str):
+    data = None
     if mode == "on":
         print("Start worker")
         data = coda.set_current_snark_worker(WORKER_PUB_KEY, WORKER_FEE)
 
     elif mode == "off":
         print("Turn off worker")
-        data = coda.set_current_snark_worker(None, 99999999)
+        data = coda.set_current_snark_worker(None, 0)
     return data
 
 
 def parse_next_proposal_time():
     try:
         daemon_status = coda.get_daemon_status()
-        next_propos = str(daemon_status["daemonStatus"]["nextProposal"]).split()[-1]
-
-        # minutes
-        if str(next_propos).endswith("m"):
-            next_propos = float(next_propos.replace("m", ""))
-            return next_propos
-
-        # hours
-        elif str(next_propos).endswith("h"):
-            next_propos = float(next_propos.replace("h", "")) * 60
-            return next_propos
-
-        # seconds
-        elif str(next_propos).endswith("s"):
-            next_propos = float(next_propos.replace("s", "")) / 60
-            return next_propos
-
+        if "endTime" not in str(daemon_status):
+            next_propos = "No proposal in this epoch"
         else:
-            logger.error(f'Can\'t parse next proposal time {next_propos}')
-            return "err"
+            next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["endTime"]) / 1000
+        return next_propos
 
     except Exception as parseProposalErr:
-        logger.exception(parseProposalErr)
+        logger.exception(f'parse_next_proposal_time Exception: {parseProposalErr}')
         return "err"
 
 
@@ -73,23 +60,25 @@ print(f'Current worker public key is: {WORKER_PUB_KEY}')
 
 while True:
     try:
-        next_proposal = round(parse_next_proposal_time(), 1)
-        while next_proposal == "err":
-            sleep(5)
+        next_proposal = parse_next_proposal_time()
+        while type(next_proposal) is str:
+            print(next_proposal)
+            time.sleep(30)
             next_proposal = parse_next_proposal_time()
 
-        print(f'Next proposal in {next_proposal} min.')
+        time_to_wait = str(timedelta(seconds=int(next_proposal - time.time())))
+        print(f'Next proposal via {time_to_wait} (h:m:s)')
         if next_proposal < STOP_WORKER_BEFORE_MIN:
             worker_on = worker_manager(mode="off")
             logger.info(worker_on)
 
             print(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
-            sleep(60 * STOP_WORKER_FOR_MIN)
+            time.sleep(60 * STOP_WORKER_FOR_MIN)
 
             worker_off = worker_manager(mode="on")
             logger.info(worker_off)
-        sleep(CHECK_PERIOD_SEC)
+        time.sleep(CHECK_PERIOD_SEC)
 
     except (TypeError, Exception) as parseErr:
         logger.exception(f'Parse error: {parseErr}')
-        sleep(5)
+        time.sleep(5)
