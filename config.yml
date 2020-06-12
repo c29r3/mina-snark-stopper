@@ -1,14 +1,14 @@
 WORKER_PUB_KEY: YOUR_PUBLIC_KEY
-WORKER_FEE: 15
+WORKER_FEE: 1
 
 # how often to check `next proposal time` (seconds)
-CHECK_PERIOD_SEC: 10
+CHECK_PERIOD_SEC: 30
 
 # the period after which the worker will be started again (minutes)
 STOP_WORKER_FOR_MIN: 10
 
 # how many minutes before 'next proposal' the worker will be turned off
-STOP_WORKER_BEFORE_MIN: 5
+STOP_WORKER_BEFORE_MIN: 10
 
 # ip address of graphql api (by default 127.0.0.1)
 GRAPHQL_HOST: 127.0.0.1
