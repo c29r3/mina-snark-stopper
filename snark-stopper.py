@@ -68,7 +68,7 @@ while True:
 
         time_to_wait = str(timedelta(seconds=int(next_proposal - time.time())))
         print(f'Next proposal via {time_to_wait}')
-        if next_proposal < STOP_WORKER_BEFORE_MIN*60:
+        if next_proposal-time.time() < STOP_WORKER_BEFORE_MIN*60:
             worker_on = worker_manager(mode="off")
             logger.info(worker_on)
 
