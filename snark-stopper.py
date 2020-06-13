@@ -22,10 +22,10 @@ def worker_manager(mode: str):
 def parse_next_proposal_time():
     try:
         daemon_status = coda.get_daemon_status()
-        if "endTime" not in str(daemon_status):
+        if "startTime" not in str(daemon_status):
             next_propos = "No proposal in this epoch"
         else:
-            next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["endTime"]) / 1000
+            next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["startTime"]) / 1000
         return next_propos
 
     except Exception as parseProposalErr:
@@ -63,7 +63,7 @@ while True:
         next_proposal = parse_next_proposal_time()
         while type(next_proposal) is str:
             print(next_proposal)
-            time.sleep(30)
+            time.sleep(CHECK_PERIOD_SEC)
             next_proposal = parse_next_proposal_time()
 
         time_to_wait = str(timedelta(seconds=int(next_proposal - time.time())))
