@@ -5,6 +5,7 @@ import yaml
 import time
 from datetime import timedelta
 from CodaClient import Client
+print("version 1.0")
 
 
 def worker_manager(mode: str):
