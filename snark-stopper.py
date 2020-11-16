@@ -5,17 +5,16 @@ import yaml
 import time
 from datetime import timedelta
 from CodaClient import Client
-print("version 1.1")
 
 
 def worker_manager(mode: str):
     data = None
     if mode == "on":
-        print("Start worker")
+        logger.info("Start worker")
         data = coda.set_current_snark_worker(WORKER_PUB_KEY, WORKER_FEE)
 
     elif mode == "off":
-        print("Turn off worker")
+        logger.info("Turn off worker")
         data = coda.set_current_snark_worker(None, 0)
     return data
 
@@ -37,7 +36,7 @@ def parse_next_proposal_time():
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
-
+logger.info("version 1.1")
 WORKER_PUB_KEY          = c["WORKER_PUB_KEY"]
 WORKER_FEE              = c["WORKER_FEE"]
 CHECK_PERIOD_SEC        = c["CHECK_PERIOD_SEC"]
@@ -68,23 +67,23 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 55:
         logger.exception(f'Can\'t get worker public key. Is it running?')
         exit(1)
 
-print(f'Current worker public key is: {WORKER_PUB_KEY}')
+logger.info(f'Current worker public key is: {WORKER_PUB_KEY}')
 
 while True:
     try:
         next_proposal = parse_next_proposal_time()
         while type(next_proposal) is str:
-            print(next_proposal)
+            logger.info(next_proposal)
             time.sleep(CHECK_PERIOD_SEC)
             next_proposal = parse_next_proposal_time()
 
         time_to_wait = str(timedelta(seconds=int(next_proposal - time.time())))
-        print(f'Next proposal via {time_to_wait}')
+        logger.info(f'Next proposal via {time_to_wait}')
         if next_proposal-time.time() < STOP_WORKER_BEFORE_MIN*60:
             worker_on = worker_manager(mode="off")
             logger.info(worker_on)
 
-            print(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
+            logger.info(f'Waiting {STOP_WORKER_FOR_MIN} minutes')
             time.sleep(60 * STOP_WORKER_FOR_MIN)
 
             worker_off = worker_manager(mode="on")
