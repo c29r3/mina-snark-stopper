@@ -10,7 +10,7 @@ Python ver. 3.6+
 
 ## Install
 *Your snark worker must be RUNNED. Otherwise, the script will take the Block producer public key*  
-*Check the configuration file. There are some options you might want to reassign*
+*Check the configuration file. There are some options you might want to reassign*  
 **If you run mina daemon through docker, then you need to add the flag `-p 127.0.0.1:3085:3085`**
 
 ### Tmux  
