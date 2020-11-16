@@ -49,7 +49,7 @@ GRAPHQL_PORT            = c["GRAPHQL_PORT"]
 coda = Client(graphql_host=GRAPHQL_HOST, graphql_port=GRAPHQL_PORT)
 daemon_status = coda.get_daemon_status()
 
-if type(WORKER_PUB_KEY) is not str:
+if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 55:
     try:
         WORKER_PUB_KEY = daemon_status["daemonStatus"]["snarkWorker"]
         BLOCK_PROD_KEY = daemon_status["daemonStatus"]["blockProductionKeys"][0]
