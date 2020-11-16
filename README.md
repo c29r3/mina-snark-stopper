@@ -49,7 +49,7 @@ If you want to change some parameteres - change it in config file and then resta
 
 ## Uninstall  
 ```
-rm -rf snark-stopper; \
+rm -rf mina-snark-stopper; \
 docker rm -f snark-stopper; \
 docker system prune -af
 ```
