@@ -9,11 +9,29 @@ Worker can take up all processor time, which negatively affects block producer. 
 Python ver. 3.6+
 
 ## Install
-*Your snark worker must be RUNNED*  
+*Your snark worker must be RUNNED. Otherwise, the script will take the Block producer public key*  
 *Check the configuration file. There are some options you might want to reassign*
+
+### Tmux  
 ```
-git clone https://github.com/c29r3/mina-snark-stopper.git \
+sudo apt-get update && sudo apt-get install tmux -y \
+&& git clone https://github.com/c29r3/mina-snark-stopper.git \
 && cd mina-snark-stopper \
 && pip3 install -r requirements.txt \
-&& python3 snark-stopper.py
+&& tmux new -s snark-stopper -d python3 snark-stopper.py
+```
+
+### Docker  
+1. Install docker  
+`sudo apt install docker.io -y`  
+
+2. Build docker image  
+`docker build . -t snark-stopper`  
+
+3. Run docker container  
+```
+docker run --net=host -d \
+--restart always \
+--name snark-stopper \
+c29r3/snark-stopper
 ```
