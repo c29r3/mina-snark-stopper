@@ -23,12 +23,9 @@ sudo apt-get update && sudo apt-get install tmux -y \
 ```
 
 ### Docker  
-1. Install docker, clone repo, build image
+1. Download config file and change the parameters to suit you
 ```
-sudo apt install docker.io -y \
-&& git clone https://github.com/c29r3/mina-snark-stopper.git \
-&& cd mina-snark-stopper \
-&& docker build . -t snark-stopper
+wget https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml
 ```
 
 2. Run docker container  
@@ -38,7 +35,7 @@ docker run -d \
 --net=host \
 --restart always \
 --name snark-stopper \
-snark-stopper
+c29r3/snark-stopper
 ```
 
 3. Check logs  
