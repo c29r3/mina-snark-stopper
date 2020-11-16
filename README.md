@@ -42,4 +42,11 @@ snark-stopper
 ```
 
 3. Check logs  
-`docker logs -f snark-stopper`
+`docker logs -f snark-stopper`  
+
+### Uninstall  
+```
+rm -rf mina-snark-stopper; \
+docker rm -f snark-stopper; \
+docker system prune -af
+```
