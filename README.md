@@ -36,5 +36,5 @@ docker run -d\
 --net=host \
 --restart always \
 --name snark-stopper \
-c29r3/snark-stopper
+snark-stopper
 ```
