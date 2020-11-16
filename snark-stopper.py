@@ -56,7 +56,7 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 55:
 
         if WORKER_PUB_KEY is None:
             logger.info(f'Worker public key is None\n'
-                        f'Automatically apply Block production key to WORKER_PUB_KEY')
+                        f'Automatically apply Block production key to {WORKER_PUB_KEY}')
             WORKER_PUB_KEY = BLOCK_PROD_KEY
 
         worker_manager(mode="on")
