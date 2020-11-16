@@ -5,7 +5,7 @@ import yaml
 import time
 from datetime import timedelta
 from CodaClient import Client
-print("version 1.0")
+print("version 1.1")
 
 
 def worker_manager(mode: str):
@@ -49,9 +49,20 @@ GRAPHQL_PORT            = c["GRAPHQL_PORT"]
 coda = Client(graphql_host=GRAPHQL_HOST, graphql_port=GRAPHQL_PORT)
 daemon_status = coda.get_daemon_status()
 
-if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 144:
+if type(WORKER_PUB_KEY) is not str:
     try:
         WORKER_PUB_KEY = daemon_status["daemonStatus"]["snarkWorker"]
+        BLOCK_PROD_KEY = daemon_status["daemonStatus"]["blockProductionKeys"][0]
+
+        if WORKER_PUB_KEY is None:
+            logger.info(f'Worker public key is None\n'
+                        f'Automatically apply Block production key to WORKER_PUB_KEY')
+            WORKER_PUB_KEY = BLOCK_PROD_KEY
+
+        worker_manager(mode="on")
+        logger.info(f'Run block producer:\n'
+                    f'SNARK worker: {WORKER_PUB_KEY}\n'
+                    f'SNARK work fee: {WORKER_FEE}')
 
     except Exception as workerAddrErr:
         logger.exception(f'Can\'t get worker public key. Is it running?')
