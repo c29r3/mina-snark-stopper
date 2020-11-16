@@ -38,3 +38,6 @@ docker run -d \
 --name snark-stopper \
 snark-stopper
 ```
+
+3. Check logs  
+`docker logs -f snark-stopper`
