@@ -61,8 +61,7 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 55:
             WORKER_PUB_KEY = BLOCK_PROD_KEY
 
         worker_manager(mode="on")
-        logger.info(f'Run block producer:\n'
-                    f'SNARK worker: {WORKER_PUB_KEY}\n'
+        logger.info(f'SNARK worker: {WORKER_PUB_KEY}\n'
                     f'SNARK work fee: {WORKER_FEE}')
 
     except Exception as workerAddrErr:
