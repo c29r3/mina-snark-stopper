@@ -20,7 +20,11 @@ sudo apt-get update && sudo apt-get install tmux -y \
 && cd mina-snark-stopper \
 && pip3 install -r requirements.txt \
 && tmux new -s snark-stopper -d python3 snark-stopper.py
-```
+```  
+You can watch the snark-stopper work  
+`tmux attach -t snark-stopper`  
+
+Press to exit `ctrl + b` and then `d`
 
 ### Docker  
 1. Download config file and change the parameters to suit you
