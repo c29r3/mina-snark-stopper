@@ -17,10 +17,9 @@ RUN apt-get update \
 WORKDIR /mina
 USER user
 
-RUN echo "Clone sources from repository..." \
-    && git clone https://github.com/c29r3/mina-snark-stopper.git \
-    && mv -f mina-snark-stopper/* . \
-    && rm -rf mina-snark-stopper \
+COPY . .
+
+RUN rm /mina/config.yml \
     && python3 -m venv venv \
     && source ./venv/bin/activate \
     && pip3 install -r requirements.txt --no-cache-dir
