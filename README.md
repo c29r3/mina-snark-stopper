@@ -28,10 +28,12 @@ sudo apt install docker.io -y \
 && git clone https://github.com/c29r3/mina-snark-stopper.git \
 && cd mina-snark-stopper \
 && docker build . -t snark-stopper
+```
 
 2. Run docker container  
 ```
-docker run --net=host -d \
+docker run -d\
+--net=host \
 --restart always \
 --name snark-stopper \
 c29r3/snark-stopper
