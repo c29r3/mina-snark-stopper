@@ -68,7 +68,10 @@ if type(WORKER_PUB_KEY) is not str or len(WORKER_PUB_KEY) != 55:
         logger.exception(f'Can\'t get worker public key. Is it running?')
         exit(1)
 
-logger.info(f'Current worker public key is: {WORKER_PUB_KEY}')
+logger.info(f'Worker public key is: {WORKER_PUB_KEY}\n'
+            f'Worker fee:           {WORKER_FEE}\n'
+            f'Check period(sec):    {CHECK_PERIOD_SEC}\n'
+            f'Stop before(min):     {STOP_WORKER_BEFORE_MIN}\n')
 
 while True:
     try:
