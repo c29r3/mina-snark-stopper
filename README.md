@@ -33,7 +33,7 @@ sudo apt install docker.io -y \
 2. Run docker container  
 ```
 docker run -d \
---volume config.yml:/mina/config.yml \
+--volume config.yml:/mina/ \
 --net=host \
 --restart always \
 --name snark-stopper \
