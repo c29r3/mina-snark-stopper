@@ -3,6 +3,7 @@
 import logging
 import yaml
 import time
+import sys
 from datetime import timedelta
 from CodaClient import Client
 
@@ -33,7 +34,8 @@ def parse_next_proposal_time():
         return "err"
 
 
-logging.basicConfig(level=logging.INFO)
+# Configure Logging
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='|%(asctime)s| %(message)s')
 logger = logging.getLogger(__name__)
 c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
 logger.info("version 1.1")
