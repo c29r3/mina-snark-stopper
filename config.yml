@@ -4,7 +4,7 @@ WORKER_PUB_KEY: YOUR_PUBLIC_KEY
 WORKER_FEE: 1
 
 # how often to check `next proposal time` (seconds)
-CHECK_PERIOD_SEC: 30
+CHECK_PERIOD_SEC: 60
 
 # the period after which the worker will be started again (minutes)
 STOP_WORKER_FOR_MIN: 10
