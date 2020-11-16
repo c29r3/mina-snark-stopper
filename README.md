@@ -45,7 +45,14 @@ c29r3/snark-stopper
 3. Check logs  
 `docker logs -f snark-stopper`  
 If you want to change some parameteres - change it in config file and then restart docker container  
-`docker restart snark-stopper`
+`docker restart snark-stopper`  
+
+#### Update docker image  
+After running the command below, go to step 2
+```
+docker rm -f snark-stopper \
+&& docker pull c29r3/snark-stopper
+```
 
 ## Uninstall  
 ```
