@@ -40,8 +40,10 @@ c29r3/snark-stopper
 
 3. Check logs  
 `docker logs -f snark-stopper`  
+If you want to change some parameteres - change it in config file and then restart docker container  
+`docker restart snark-stopper`
 
-### Uninstall  
+## Uninstall  
 ```
 rm -rf mina-snark-stopper; \
 docker rm -f snark-stopper; \
