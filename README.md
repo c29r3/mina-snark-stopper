@@ -27,7 +27,7 @@ sudo apt-get update \
 Run  
 ```
 cd mina-snark-stopper; \
-&& tmux new -s snark-stopper -d venv/bin/python3 snark-stopper.py
+tmux new -s snark-stopper -d venv/bin/python3 snark-stopper.py
 ```
 
 You can watch the snark-stopper work  
