@@ -20,7 +20,7 @@ sudo apt-get update \
 && sudo apt-get install python3-venv tmux git -y \
 && git clone https://github.com/c29r3/mina-snark-stopper.git \
 && cd mina-snark-stopper \
-&& source ./venv/bin/activate \
+&& source venv/bin/activate \
 && pip3 install -r requirements.txt
 ```  
 Run  
