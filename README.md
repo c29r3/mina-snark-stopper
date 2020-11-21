@@ -14,13 +14,21 @@ Python ver. 3.6+
 **If you run mina daemon through docker, then you need to add the flag `-p 127.0.0.1:3085:3085`**
 
 ### Tmux  
+Install 
 ```
-sudo apt-get update && sudo apt-get install tmux -y \
+sudo apt-get update && sudo apt-get install python3-venv tmux -y \
 && git clone https://github.com/c29r3/mina-snark-stopper.git \
 && cd mina-snark-stopper \
-&& pip3 install -r requirements.txt \
-&& tmux new -s snark-stopper -d python3 snark-stopper.py
+&& source ./venv/bin/activate \
+&& pip3 install -r requirements.txt
 ```  
+
+Run  
+```
+cd mina-snark-stopper; \
+&& tmux new -s snark-stopper -d venv/bin/python3 snark-stopper.py
+```
+
 You can watch the snark-stopper work  
 `tmux attach -t snark-stopper`  
 
