@@ -16,13 +16,13 @@ Python ver. 3.6+
 ### Tmux  
 Install 
 ```
-sudo apt-get update && sudo apt-get install python3-venv tmux -y \
+sudo apt-get update \
+&& sudo apt-get install python3-venv tmux git -y \
 && git clone https://github.com/c29r3/mina-snark-stopper.git \
 && cd mina-snark-stopper \
 && source ./venv/bin/activate \
 && pip3 install -r requirements.txt
 ```  
-
 Run  
 ```
 cd mina-snark-stopper; \
