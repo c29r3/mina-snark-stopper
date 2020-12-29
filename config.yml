@@ -1,6 +1,6 @@
 WORKER_PUB_KEY: YOUR_PUBLIC_KEY
-# specified in nanocoda
-# 1 CODA = 1,000,000,000 nanocoda
+# specified in nanomina
+# 1 MINA = 1,000,000,000 nanomina
 WORKER_FEE: 1
 
 # how often to check `next proposal time` (seconds)
