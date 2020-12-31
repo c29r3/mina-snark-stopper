@@ -53,7 +53,24 @@ c29r3/snark-stopper
 3. Check logs  
 `docker logs -f snark-stopper`  
 If you want to change some parameteres - change it in config file and then restart docker container  
-`docker restart snark-stopper`  
+`docker restart snark-stopper` 
+
+## Troubleshooting  
+If the snark-stopper can't connect to port `3085`:  
+1. Check port availability  
+`nc -t -vv localhost 3085`
+Output should be something like this:  
+`Connection to localhost 3085 port [tcp/*] succeeded!`
+
+If the connection hangs, then the following options are possible:  
+- Access to port `3085` is blocked via ufw\iptables  
+- You did not add a docker container flag `-p 127.0.0.1:3085:3085`   
+- Node is not synced yet. For this reason the stopper can't connect  
+
+2. Port responds, but the stopper still can't connect  
+`iptables -D OUTPUT -p tcp -d 172.16.0.0/12 -j DROP`  
+TL;DR  
+it's because of the blocking of private subnets that the docker uses  
 
 #### Update docker image  
 After running the command below, go to step 2
