@@ -68,7 +68,7 @@ If the connection hangs, then the following options are possible:
 - Node is not synced yet. For this reason the stopper can't connect  
 
 2. Port responds, but the stopper still can't connect  
-`iptables -D OUTPUT -p tcp -d 172.16.0.0/12 -j DROP`  
+`iptables -D OUTPUT -d 172.16.0.0/12 -j DROP`  
 it's because of the blocking of private subnets that the docker uses  
 
 #### Update docker image  
