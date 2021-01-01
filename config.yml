@@ -1,7 +1,8 @@
 WORKER_PUB_KEY: YOUR_PUBLIC_KEY
-# specified in nanomina
+# specified in MINA
 # 1 MINA = 1,000,000,000 nanomina
-WORKER_FEE: 25000000
+# examples 0.25
+WORKER_FEE: 0.25
 
 # how often to check `next proposal time` (seconds)
 CHECK_PERIOD_SEC: 120
