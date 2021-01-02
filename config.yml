@@ -8,7 +8,7 @@ WORKER_FEE: 0.25
 CHECK_PERIOD_SEC: 120
 
 # the period after which the worker will be started again (minutes)
-STOP_WORKER_FOR_MIN: 10
+STOP_WORKER_FOR_MIN: 15
 
 # how many minutes before 'next proposal' the worker will be turned off
 STOP_WORKER_BEFORE_MIN: 10
