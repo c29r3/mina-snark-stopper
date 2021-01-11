@@ -37,7 +37,7 @@ Press to exit `ctrl + b` and then `d`
 ### Docker  
 1. Download config file and change the parameters to suit you
 ```
-wget https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml
+curl -s https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml > config.yml
 ```
 
 2. Run docker container  
@@ -75,7 +75,7 @@ it's because of the blocking of private subnets that the docker uses
 After running the command below, go to step 2
 ```
 docker rm -f snark-stopper; \
-wget https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml; \
+curl -s https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml > config.yml; \
 docker pull c29r3/snark-stopper
 ```
 
