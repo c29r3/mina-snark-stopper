@@ -30,7 +30,7 @@ def parse_next_proposal_time():
                 worker_manager(mode="off")
             next_propos = f'😿 Node is not synced yet. STATUS: {sync_status} | Height: {current_height}\\{max_height}'
 
-        elif "startTime" not in str(daemon_status):
+        elif "startTime" not in str(daemon_status["daemonStatus"]["nextBlockProduction"]):
             next_propos = "🙀 No proposal in this epoch"
         else:
             next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["startTime"]) / 1000
