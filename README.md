@@ -74,8 +74,9 @@ it's because of the blocking of private subnets that the docker uses
 #### Update docker image  
 After running the command below, go to step 2
 ```
-docker rm -f snark-stopper \
-&& docker pull c29r3/snark-stopper
+docker rm -f snark-stopper; \
+wget https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml; \
+docker pull c29r3/snark-stopper
 ```
 
 ## Uninstall  
