@@ -34,9 +34,10 @@ def parse_next_proposal_time():
         current_height = daemon_status["daemonStatus"]["blockchainLength"] or 1
         max_height     = daemon_status["daemonStatus"]["highestBlockLengthReceived"] or 1
 
-        if sync_status.lower() != "synced" or int(current_height) < int(max_height)-1:
+        if sync_status.lower() != "synced" or int(current_height) < int(max_height)-STOP_WORKER_IF_CATCHUP:
             if daemon_status["daemonStatus"]["snarkWorker"] is not None:
-                worker_manager(mode="off")
+                if STOP_WORKER_IF_CATCHUP > 0:
+                    worker_manager(mode="off")
             next_propos = f'😿 Node is not synced yet. STATUS: {sync_status} | Height: {current_height}\\{max_height}'
 
         elif "startTime" not in str(daemon_status["daemonStatus"]["nextBlockProduction"]):
@@ -77,10 +78,11 @@ def parse_worker_pubkey():
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='|%(asctime)s| %(message)s')
 logger = logging.getLogger(__name__)
 c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
-print("version 1.2.2")
+print("version 1.2.3")
 
 WORKER_PUB_KEY          = str(c["WORKER_PUB_KEY"])
 WORKER_FEE              = float(c["WORKER_FEE"])
+STOP_WORKER_IF_CATCHUP  = int(c["STOP_WORKER_IF_CATCHUP"])
 CHECK_PERIOD_SEC        = int(c["CHECK_PERIOD_SEC"])
 STOP_WORKER_FOR_MIN     = int(c["STOP_WORKER_FOR_MIN"])
 STOP_WORKER_BEFORE_MIN  = int(c["STOP_WORKER_BEFORE_MIN"])
