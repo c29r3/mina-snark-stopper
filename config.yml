@@ -4,10 +4,6 @@ WORKER_PUB_KEY: YOUR_PUBLIC_KEY
 # examples 0.25 MINA = 250000000 nanomina
 WORKER_FEE: 0.25
 
-# on or off
-# automatic turn-on of the worker if there is enough time before block production
-WORKER_AUTO_START: on
-
 # how often to check `next proposal time` (seconds)
 CHECK_PERIOD_SEC: 120
 

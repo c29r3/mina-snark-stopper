@@ -9,8 +9,17 @@ from CodaClient import Client
 def worker_manager(mode: str):
     data = None
     if mode == "on":
-        logger.info("Start worker")
-        data = coda.set_current_snark_worker(WORKER_PUB_KEY, WORKER_FEE)
+        # Reread WORKER_FEE every time
+        c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
+        WORKER_FEE        = float(c["WORKER_FEE"])
+        WORKER_FEE        = int(WORKER_FEE * 1e9)
+        daemon_status     = coda.get_daemon_status()
+        status_worker_pub = daemon_status["daemonStatus"]["snarkWorker"]
+        status_worker_fee = daemon_status["daemonStatus"]["snarkWorkFee"]
+
+        if status_worker_pub is None or int(status_worker_fee) != WORKER_FEE:
+            logger.info(f'Start worker: FEE {WORKER_FEE / 1e9} MINA')
+            data = coda.set_current_snark_worker(WORKER_PUB_KEY, WORKER_FEE)
 
     elif mode == "off":
         logger.info("Turn off worker")
@@ -31,6 +40,7 @@ def parse_next_proposal_time():
             next_propos = f'😿 Node is not synced yet. STATUS: {sync_status} | Height: {current_height}\\{max_height}'
 
         elif "startTime" not in str(daemon_status["daemonStatus"]["nextBlockProduction"]):
+            worker_manager("on")
             next_propos = "🙀 No proposal in this epoch"
         else:
             next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["startTime"]) / 1000
@@ -53,8 +63,7 @@ def parse_worker_pubkey():
         return status_worker_pub
 
     elif status_worker_pub is None:
-        logger.info(f'Worker public key is None\n'
-                    f'Automatically apply Block production key to {WORKER_PUB_KEY}')
+        logger.info(f'Worker public key is None')
         
         BLOCK_PROD_KEY = daemon_status["daemonStatus"]["blockProductionKeys"][0]
         return BLOCK_PROD_KEY
@@ -68,11 +77,10 @@ def parse_worker_pubkey():
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='|%(asctime)s| %(message)s')
 logger = logging.getLogger(__name__)
 c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
-logger.info("version 1.2.1")
+print("version 1.2.2")
 
 WORKER_PUB_KEY          = str(c["WORKER_PUB_KEY"])
 WORKER_FEE              = float(c["WORKER_FEE"])
-WORKER_AUTO_START       = str(c["WORKER_AUTO_START"])
 CHECK_PERIOD_SEC        = int(c["CHECK_PERIOD_SEC"])
 STOP_WORKER_FOR_MIN     = int(c["STOP_WORKER_FOR_MIN"])
 STOP_WORKER_BEFORE_MIN  = int(c["STOP_WORKER_BEFORE_MIN"])
@@ -91,10 +99,10 @@ except:
     exit(1)
 
 
-logger.info(f'Worker public key is: {WORKER_PUB_KEY}\n'
-            f'Worker fee:           {WORKER_FEE}\n'
-            f'Check period(sec):    {CHECK_PERIOD_SEC}\n'
-            f'Stop before(min):     {STOP_WORKER_BEFORE_MIN}\n')
+print(f'Worker public key:  {WORKER_PUB_KEY}\n'
+      f'Worker fee:         {WORKER_FEE}\n'
+      f'Check period(sec):  {CHECK_PERIOD_SEC}\n'
+      f'Stop before(min):   {STOP_WORKER_BEFORE_MIN}\n')
 
 while True:
     try:
@@ -117,13 +125,7 @@ while True:
             logger.info(worker_on)
 
         else:
-            if WORKER_AUTO_START == "True":
-                daemon_status = coda.get_daemon_status()
-                worker_pub_key = daemon_status["daemonStatus"]["snarkWorker"]
-                # If WORKER OFF and enought time --> WORKER ON
-                if worker_pub_key is None:
-                    worker_on = worker_manager(mode="on")
-                    logger.info(f'Autostart worker, next proposal in {time_to_wait}')
+            worker_manager("on")
 
         time.sleep(CHECK_PERIOD_SEC)
 
