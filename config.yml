@@ -4,12 +4,6 @@ WORKER_PUB_KEY: YOUR_PUBLIC_KEY
 # examples 0.25 MINA = 250000000 nanomina
 WORKER_FEE: 0.25
 
-# stopping snark worker during node catchup if 
-# current_block_height < max_observed_block_length - N
-# where N is number of blocks
-# if STOP_WORKER_IF_CATCHUP = 0 --> snark worker ill not be stopped
-STOP_WORKER_IF_CATCHUP: 5
-
 # how often to check `next proposal time` (seconds)
 CHECK_PERIOD_SEC: 120
 
