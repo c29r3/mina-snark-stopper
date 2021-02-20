@@ -44,6 +44,7 @@ touch snark_stopper.log
 
 2. Run docker container  
 ```
+touch snark_stopper.log; \
 docker run -d \
 --volume $(pwd)/config.yml:/mina/config.yml \
 --volume $(pwd)/snark_stopper.log:/mina/snark_stopper.log \
