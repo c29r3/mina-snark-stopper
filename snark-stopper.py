@@ -2,8 +2,19 @@ import logging
 import yaml
 import time
 import sys
-from datetime import timedelta
+import datetime
 from CodaClient import Client
+
+
+def write_to_log(log_str: str, print_mode: str = "info"):
+    now = datetime.datetime.now()
+    if print_mode == "warning":
+        logger.warning(log_str)
+    else:
+        logger.info(log_str)
+    
+    with open("snark_stopper.log", "a") as log_f:
+        log_f.write(f'{now.strftime("%Y-%m-%d %H:%M:%S")} | {log_str}\n')
 
 
 def worker_manager(mode: str):
@@ -18,12 +29,16 @@ def worker_manager(mode: str):
         status_worker_fee = daemon_status["daemonStatus"]["snarkWorkFee"]
 
         if status_worker_pub is None or int(status_worker_fee) != WORKER_FEE:
-            logger.info(f'Start worker: FEE {WORKER_FEE / 1e9} MINA')
+            write_to_log(f'Start worker: FEE {WORKER_FEE / 1e9} MINA')
+            worker_address = coda.get_daemon_status()["daemonStatus"]["snarkWorker"]
+            write_to_log(f'Worker status check. worker_pub_key = {worker_address}')
             data = coda.set_current_snark_worker(WORKER_PUB_KEY, WORKER_FEE)
 
     elif mode == "off":
-        logger.info("Turn off worker")
+        write_to_log("Turn off worker")
         data = coda.set_current_snark_worker(None, 0)
+        worker_address = coda.get_daemon_status()["daemonStatus"]["snarkWorker"]
+        write_to_log(f'Worker status check. worker_pub_key = {worker_address}')
     return data
 
 
@@ -38,14 +53,14 @@ def parse_next_proposal_time():
             logger.fatal(f'😿 Node is not synced yet. STATUS: {sync_status} | Height: {current_height}\\{max_height}')
 
         if "startTime" not in str(daemon_status["daemonStatus"]["nextBlockProduction"]):
-            worker_manager("on")
+            worker_manager(mode="on")
             next_propos = "🙀 No proposal in this epoch"
         else:
             next_propos = int(daemon_status["daemonStatus"]["nextBlockProduction"]["times"][0]["startTime"]) / 1000
         return next_propos
 
     except Exception as parseProposalErr:
-        logger.exception(f'😱 parse_next_proposal_time Exception: {parseProposalErr}')
+        write_to_log(f'😱 parse_next_proposal_time Exception: {parseProposalErr}', print_mode="warning")
         return f'parse_next_proposal_time() Exception: {parseProposalErr}'
 
 
@@ -66,7 +81,7 @@ def parse_worker_pubkey():
         return BLOCK_PROD_KEY
 
     else:
-        logger.fatal('😡 Enter the worker public key in config.yml')
+        write_to_log('😡 Enter the worker public key in config.yml', print_mode="warning")
         exit(1)
     
 
@@ -74,7 +89,7 @@ def parse_worker_pubkey():
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='|%(asctime)s| %(message)s')
 logger = logging.getLogger(__name__)
 c = yaml.load(open('config.yml', encoding='utf8'), Loader=yaml.SafeLoader)
-print("version 1.2.4")
+print("version 1.2.5")
 
 WORKER_PUB_KEY          = str(c["WORKER_PUB_KEY"])
 WORKER_FEE              = float(c["WORKER_FEE"])
@@ -89,43 +104,41 @@ WORKER_FEE              = int(WORKER_FEE * 1e9)
 try:
     coda = Client(graphql_host=GRAPHQL_HOST, graphql_port=GRAPHQL_PORT)
     WORKER_PUB_KEY = parse_worker_pubkey()
+    write_to_log("Snark-stopper launched")
 
 except:
-    logger.fatal(f'😿 Can\'t connect to graphql {GRAPHQL_HOST}:{GRAPHQL_PORT}.\n'
-                 f'Check troubleshooting manual - https://github.com/c29r3/mina-snark-stopper#troubleshooting')
+    write_to_log(f'😿 Can\'t connect to graphql {GRAPHQL_HOST}:{GRAPHQL_PORT}. '
+                 f'Check troubleshooting manual - https://github.com/c29r3/mina-snark-stopper#troubleshooting', print_mode="warning")
     exit(1)
-
 
 print(f'Worker public key:  {WORKER_PUB_KEY}\n'
       f'Worker fee:         {WORKER_FEE}\n'
       f'Check period(sec):  {CHECK_PERIOD_SEC}\n'
-      f'Stop before(min):   {STOP_WORKER_BEFORE_MIN}\n')
+      f'Stop before(min):   {STOP_WORKER_BEFORE_MIN}\n'
+      f'https://github.com/c29r3/mina-snark-stopper\n'
+      f'http://staketab.com/\n')
 
 while True:
     try:
         next_proposal = parse_next_proposal_time()
         while type(next_proposal) is str:
-            logger.info(next_proposal)
+            write_to_log(next_proposal)
             time.sleep(CHECK_PERIOD_SEC)
             next_proposal = parse_next_proposal_time()
 
-        time_to_wait = str(timedelta(seconds=int(next_proposal - time.time())))
-        logger.info(f'🕐 Next proposal via {time_to_wait}')
-        if next_proposal-time.time() < STOP_WORKER_BEFORE_MIN*60:
-            worker_off = worker_manager(mode="off")
-            logger.info(worker_off)
-
+        time_to_wait = str(datetime.timedelta(seconds=int(next_proposal - time.time())))
+        write_to_log(f'🕐 Next proposal via {time_to_wait}')
+        if next_proposal-time.time() <= STOP_WORKER_BEFORE_MIN*60:
+            worker_manager(mode="off")
             logger.info(f'⏰ Waiting {STOP_WORKER_FOR_MIN} minutes')
             time.sleep(60 * STOP_WORKER_FOR_MIN)
-
-            worker_on = worker_manager(mode="on")
-            logger.info(worker_on)
+            worker_manager(mode="on")
 
         else:
-            worker_manager("on")
+            worker_manager(mode="on")
 
         time.sleep(CHECK_PERIOD_SEC)
 
     except (TypeError, Exception) as parseErr:
-        logger.exception(f'🤷‍♂️ Parse error: {parseErr}')
+        write_to_log(f'🤷‍♂️ Parse error: {parseErr}', print_mode="warning")
         time.sleep(10)
