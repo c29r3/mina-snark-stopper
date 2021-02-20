@@ -1,5 +1,6 @@
 # mina-snark-stopper
-Tool for Mina Protocol
+Tool for Mina Protocol  
+Site: http://staketab.com/
 
 ## Description
 This tool can be useful for Mina validators who run node at same time as block producer and snark worker. 
