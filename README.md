@@ -45,6 +45,7 @@ curl -s https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config
 ```
 docker run -d \
 --volume $(pwd)/config.yml:/mina/config.yml \
+--volume $(pwd)/snark_stopper.log:/mina/snark_stopper.log \
 --net=host \
 --restart always \
 --name snark-stopper \

@@ -10,7 +10,7 @@ CHECK_PERIOD_SEC: 120
 # the period after which the worker will be started again (minutes)
 STOP_WORKER_FOR_MIN: 15
 
-# how many minutes before 'next proposal' the worker will be turned off
+# how many minutes before 'next proposal' the worker will be turned off (minutes)
 STOP_WORKER_BEFORE_MIN: 10
 
 # ip address of graphql api (by default 127.0.0.1)
