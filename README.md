@@ -37,8 +37,7 @@ Press to exit `ctrl + b` and then `d`
 ### Docker  
 1. Download config file and change the parameters to suit you
 ```
-curl -s https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml > config.yml; \
-touch snark_stopper.log
+curl -s https://raw.githubusercontent.com/c29r3/mina-snark-stopper/master/config.yml > config.yml
 ```
 
 2. Run docker container  
