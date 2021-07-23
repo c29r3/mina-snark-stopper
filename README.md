@@ -43,13 +43,12 @@ touch snark_stopper.log
 
 2. Run docker container  
 ```
-touch snark_stopper.log; \
-chmod 666 snark_stopper.log; \
-docker run -d \
+sudo docker run -d \
 --volume $(pwd)/config.yml:/mina/config.yml \
 --volume $(pwd)/snark_stopper.log:/mina/snark_stopper.log \
 --net=host \
 --restart always \
+--user $(id -u):$(id -g) \
 --name snark-stopper \
 c29r3/snark-stopper
 ```
